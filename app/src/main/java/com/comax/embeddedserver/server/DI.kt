@@ -14,30 +14,32 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DI {
 
-    @Singleton
-    @Provides
-    fun provideAppModules(userService: UserService): AppModules {
-        return AppModules(userService)
-    }
+	@Singleton
+	@Provides
+	fun provideAppModules(userService: UserService): AppModules {
+		return AppModules(userService)
+	}
 
-    @Singleton
-    @Provides
-    fun provideApplicationEngineEnvironment(appModules: AppModules): ApplicationEngineEnvironment {
-      return applicationEngineEnvironment {
-          module { appModules.installModules(this) }
-          connector {
-              host = BuildConfig.LOCAL_HOST
-              port = BuildConfig.PORT
-          }
-      }
-    }
+	@Singleton
+	@Provides
+	fun provideApplicationEngineEnvironment(appModules: AppModules): ApplicationEngineEnvironment {
+		return applicationEngineEnvironment {
+			module {
+				with(appModules) { installModules() }
+			}
+			connector {
+				host = BuildConfig.LOCAL_HOST
+				port = BuildConfig.PORT
+			}
+		}
+	}
 
-    @Singleton
-    @Provides
-    fun provideApplicationEngine(environmentConfig: ApplicationEngineEnvironment): NettyApplicationEngine {
-        return embeddedServer(
-            factory = Netty,
-            environment = environmentConfig
-        )
-    }
+	@Singleton
+	@Provides
+	fun provideApplicationEngine(environmentConfig: ApplicationEngineEnvironment): NettyApplicationEngine {
+		return embeddedServer(
+			factory = Netty,
+			environment = environmentConfig
+		)
+	}
 }

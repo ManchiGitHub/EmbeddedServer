@@ -13,33 +13,30 @@ import javax.inject.Singleton
 
 @Singleton
 class AppModules @Inject constructor(
-    private val userService: UserService
+	private val userService: UserService
 ) {
+	fun Application.installModules() {
+		setupContentNegotiation()
+		routesModule()
+		corsModule()
+	}
 
-    fun installModules(app: Application) {
-        app.apply {
-            setupContentNegotiation()
-            setupRoutes()
-            useCores()
-        }
-    }
+	private fun Application.routesModule() {
+		install(Routing) {
+			userRoutes(userService)
+		}
+	}
 
-    private fun Application.setupRoutes() {
-        install(Routing) {
-            userRoutes(userService)
-        }
-    }
+	private fun Application.corsModule() {
+		install(CORS) { anyHost() }
+	}
 
-    private fun Application.useCores() {
-        install(CORS) { anyHost() }
-    }
-
-    private fun Application.setupContentNegotiation() {
-        install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                isLenient = true
-            })
-        }
-    }
+	private fun Application.setupContentNegotiation() {
+		install(ContentNegotiation) {
+			json(Json {
+				prettyPrint = true
+				isLenient = true
+			})
+		}
+	}
 }

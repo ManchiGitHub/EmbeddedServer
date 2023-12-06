@@ -11,11 +11,11 @@ class UserRepositoryImp @Inject constructor() : UserRepository {
 
     // Dummy content
     private val userList = ArrayList<User>().apply {
-        add(User(1,"Marko Katziv", 31))
+        add(User(1,"Marko", 31))
         add(User(2,"Yossi", 46))
         add(User(3,"Lionel Messi", 35))
         add(User(4,"Christinao Ronaldo", 27))
-        add(User(5,"Jeymar Jr.", 29))
+        add(User(5,"Neymar Jr.", 29))
     }
 
     override fun userList(): ArrayList<User> = userList
